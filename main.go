@@ -156,40 +156,51 @@ func initDB() (*Database, error) {
 		config.CouchDB.Pwd = os.Getenv("COUCHBASE_PWD")
 	}
 
-	// Use defaults if values are still empty
-	if config.CouchDB.URL == "" {
-		config.CouchDB.URL = "localhost:8091" // Couchbase uses 8091
-	}
-	if config.CouchDB.Bucket == "" {
-		config.CouchDB.Bucket = "fndds"
-	}
+	log.Printf("Attempting to connect to Couchbase with URL: %s, Bucket: %s", config.CouchDB.URL, config.CouchDB.Bucket)
 
-	// Connect to Couchbase cluster
+	// Configure cluster options for cloud connectivity
 	clusterOpts := gocb.ClusterOptions{
 		Authenticator: gocb.PasswordAuthenticator{
 			Username: config.CouchDB.User,
 			Password: config.CouchDB.Pwd,
 		},
+		SecurityConfig: gocb.SecurityConfig{
+			TLSSkipVerify: false,
+		},
+		TimeoutsConfig: gocb.TimeoutsConfig{
+			ConnectTimeout: time.Second * 30,
+			KVTimeout:      time.Second * 30,
+			QueryTimeout:   time.Second * 30,
+		},
 	}
 
-	cluster, err := gocb.Connect(
-		fmt.Sprintf("couchbase://%s", config.CouchDB.URL),
-		clusterOpts,
-	)
+	// Connect to cluster
+	cluster, err := gocb.Connect(fmt.Sprintf("couchbases://%s", config.CouchDB.URL), clusterOpts)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to cluster: %v", err)
 	}
 
-	// Get a bucket reference
+	log.Printf("Successfully connected to cluster, attempting to get bucket: %s", config.CouchDB.Bucket)
+
+	// Try a simple query to verify connectivity
+	result, err := cluster.Query(
+		"SELECT RAW 1",
+		&gocb.QueryOptions{},
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute test query: %v", err)
+	}
+	result.Close()
+
+	// Get bucket with longer timeout
 	bucket := cluster.Bucket(config.CouchDB.Bucket)
 
-	// We need to wait for the bucket to be ready
-	err = bucket.WaitUntilReady(5*time.Second, nil)
+	// Increase the wait time for bucket readiness
+	err = bucket.WaitUntilReady(30*time.Second, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to bucket: %v", err)
 	}
 
-	// Get default collection reference
 	collection := bucket.DefaultCollection()
 
 	database := &Database{

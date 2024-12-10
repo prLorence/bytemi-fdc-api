@@ -1,6 +1,6 @@
 couchdb:   
-  url: localhost
+  url: cb.tnuzmptycgo5ej0r.cloud.couchbase.com
   bucket: fndds 
   fts: fd_food  // default full-text index   
-  user: admin
-  pwd: bytemi
+  user: bytemi
+  pwd: A7Cud19gL2rVKn!
