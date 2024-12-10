@@ -1,0 +1,6 @@
+couchdb:   
+  url: localhost
+  bucket: fndds 
+  fts: fd_food  // default full-text index   
+  user: admin
+  pwd: bytemi
