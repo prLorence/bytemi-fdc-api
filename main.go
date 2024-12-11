@@ -327,6 +327,12 @@ func getFoodData(objectName string) (*FoodData, error) {
 		searchTerm = "Rice, cooked, NFS"
 	case "banana":
 		searchTerm = "Banana, raw"
+	case "cucumber":
+		searchTerm = "Cucumber, raw"
+	case "apple":
+		searchTerm = "Apple, dried"
+	case "sugar melon":
+		searchTerm = "Cantaloupe, raw"
 	default:
 		return nil, fmt.Errorf("unknown food: %s", objectName)
 	}
