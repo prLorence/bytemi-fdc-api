@@ -46,14 +46,14 @@ type MacroResponse struct {
 
 type MacroData struct {
 	Found            bool    `json:"found"`
-	Macros           Macros  `json:"macros"`
+	Macros           Macros  `json:"macros"` // Contains calories
 	RequestedFood    string  `json:"requested_food"`
 	RequestedVolume  float64 `json:"requested_volume"`
 	CalculatedWeight float64 `json:"calculated_weight"`
 }
 
 type Macros struct {
-	Calories float64 `json:"calories"`
+	Calories float64 `json:"calories"` // Calories are here
 	Carbs    float64 `json:"carbs"`
 	Fat      float64 `json:"fat"`
 	Protein  float64 `json:"protein"`
