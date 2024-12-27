@@ -1,5 +1,7 @@
 # ByteMi Macronutrient API
 
+![Research Paper](./docs/ByteMi-Combining-Mask-R-CNN-with-Pinhole-Camera-Model-M-PCAM-for-Food-Image-Analysis-with-Volume-and-Macronutrient-Estimation-1.pdf)
+
 This API uses the USDA's FoodData central as its data source in JSON format
 
 The JSON dataset are then stored at CouchBase that allows us to use full text searching without hurting performance
@@ -15,6 +17,6 @@ The system has three parts:
 
 ## System Components
 
-1. [Mobile App Frontend]()
-2. [Mask-RCNN + Volume Estimation API ]()
+1. [Mobile App Frontend](https://github.com/prLorence/bytemi-depth)
+2. [Mask-RCNN + Volume Estimation API](https://github.com/prLorence/integrated_byte_mi)
 3. Macronutrient API (you're here)
