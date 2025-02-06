@@ -182,16 +182,6 @@ func initDB() (*Database, error) {
 
 	log.Printf("Successfully connected to cluster, attempting to get bucket: %s", config.CouchDB.Bucket)
 
-	// Try a simple query to verify connectivity
-	result, err := cluster.Query(
-		"SELECT RAW 1",
-		&gocb.QueryOptions{},
-	)
-	if err != nil {
-		return nil, fmt.Errorf("failed to execute test query: %v", err)
-	}
-	result.Close()
-
 	// Get bucket with longer timeout
 	bucket := cluster.Bucket(config.CouchDB.Bucket)
 
